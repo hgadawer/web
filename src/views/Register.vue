@@ -77,15 +77,18 @@ const onRegister = () => {
             password: formData.password2,
         }
         userRegister(param).then((res) => {
-            if (res.data.code == 0) {
+            if (res.data.code == 200) {
                 message.success('注册成功');
                 onLogin()
             }
+            if(res.data.code == 500){
+                message.warn(res.data.info)
+            }
             if (res.data.code == 10001) {
-                message.warn('该用户已经存在');
+                message.warn(res.data.msg);
             }
             if (res.data.code == 10005) {
-                message.error('验证码错误');
+                message.error(res.data.msg);
             }
         })
     })
@@ -102,12 +105,12 @@ const onGetCode = () => {
         email: formData.email
     }
     getVerifyCode(param).then((res) => {
-        if (res.data.code == 0) {
+        if (res.data.code == 200) {
             loading.value = false
             disabled.value = true
             buttonText.value = '验证码已发送'
         }
-        if (res.data.code == 10004) {
+        if (res.data.code == 500) {
             loading.value = false
             message.error('验证码发送失败')
         }
